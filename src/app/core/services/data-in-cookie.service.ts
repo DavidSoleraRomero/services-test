@@ -6,10 +6,15 @@ import { Model } from '../interfaces/model';
 @Injectable({
   providedIn: 'root'
 })
-export class DataInMemoryService<T extends Model> extends DataService<T> {
+export class DataInCookieService<T extends Model> extends DataService<T> {
 
   constructor() {
     super();
+    let data: string | null = localStorage.getItem("data");
+    if (data) {
+      let storagedData: T[] = JSON.parse(data);
+      this._data.next(storagedData);
+    } 
   }
 
   private generateAlfanumericCode(): string {
@@ -26,6 +31,7 @@ export class DataInMemoryService<T extends Model> extends DataService<T> {
     element.id = id;
     let nextData: T[] = [...this._data.getValue(), element];
     this._data.next(nextData);
+    localStorage.setItem("data", JSON.stringify(nextData));
     return new Observable((observer) => {
       observer.next(element);
       observer.complete();
@@ -54,6 +60,7 @@ export class DataInMemoryService<T extends Model> extends DataService<T> {
         if (t.id == id) {
           nextData[index] = element;
           this._data.next(nextData);
+          localStorage.setItem("data", JSON.stringify(nextData));
         }
       });
     return new Observable((observer) => {
@@ -70,6 +77,7 @@ export class DataInMemoryService<T extends Model> extends DataService<T> {
       deletedData = nextData[index];
       nextData.splice(index, 1);
       this._data.next(nextData);
+      localStorage.setItem("data", JSON.stringify(nextData));
     }
     return new Observable((observer) => {
       observer.next(deletedData);
@@ -81,6 +89,7 @@ export class DataInMemoryService<T extends Model> extends DataService<T> {
     let nextData: T[] = this._data.getValue();
     let firstData = nextData.shift();
     this._data.next(nextData);
+    localStorage.setItem("data", JSON.stringify(nextData));
     return new Observable((observer) => {
       observer.next(firstData);
       observer.complete();

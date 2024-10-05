@@ -13,5 +13,5 @@ export abstract class DataService<T extends Model> {
     public abstract requestById(id: string): Observable<T | null>;
     public abstract update(id: string, element: T): Observable<T | null>;
     public abstract delete(id: string): Observable<T | null>;
-
+    public abstract deleteFirst(): Observable<T | null>;
 }

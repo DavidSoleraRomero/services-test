@@ -9,66 +9,31 @@ import { Observable } from 'rxjs';
 export class PeopleService {
 
   constructor(
-    private dataInMemoryService: DataService<Person>,
-  ) { 
-    this.dataInMemoryService.create({
-      name: "David", 
-      surnames: "Solera Romero", 
-      age: 18
-    }).subscribe({
-      next: value => {
-        console.log(value.name + " created");
-      },
-      error: error => {
-        console.log(error);
-      }
-    })
-
-    this.dataInMemoryService.create({
-      name: "Adrián", 
-      surnames: "Solera Romero", 
-      age: 25
-    }).subscribe({
-      next: value => {
-        console.log(value.name + " created");
-      },
-      error: error => {
-        console.log(error);
-      }
-    })
-
-    this.dataInMemoryService.create({
-      name: "Ignacio", 
-      surnames: "Lázaro Zambrano", 
-      age: 19
-    }).subscribe({
-      next: value => {
-        console.log(value.name + " created");
-      },
-      error: error => {
-        console.log(error);
-      }
-    })
-  }
+    private dataService: DataService<Person>,
+  ) { }
   
   addPerson(person: Person): Observable<Person> {
-    return this.dataInMemoryService.create(person)
+    return this.dataService.create(person)
   }
 
   updatePerson(id: string, person: Person): Observable<Person | null> {
-    return this.dataInMemoryService.update(id, person);
+    return this.dataService.update(id, person);
   }
 
   deletePerson(id: string): Observable<Person | null> {
-    return this.dataInMemoryService.delete(id);
+    return this.dataService.delete(id);
+  }
+
+  deleteFirstPerson() {
+    return this.dataService.deleteFirst();
   }
 
   requestPersonById(id: string): Observable<Person | null> {
-    return this.dataInMemoryService.requestById(id);
+    return this.dataService.requestById(id);
   }
   
   requestAllPersons(): Observable<Person[]> {
-    return this.dataInMemoryService.requestAll();
+    return this.dataService.requestAll();
   }
 
 }

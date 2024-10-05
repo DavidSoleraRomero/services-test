@@ -8,11 +8,14 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DataInMemoryService } from './core/services/data-in-memory.service';
 import { DataService } from './core/interfaces/data-service';
+import { DataInCookieService } from './core/services/data-in-cookie.service';
 
 export function DataServiceFactory(backend:string){
   switch(backend){
     case 'InMemory':
       return new DataInMemoryService();
+    case "LocalStorage":
+      return new DataInCookieService();
     default:
       throw new Error("Not implemented");
   }
@@ -24,12 +27,16 @@ export function DataServiceFactory(backend:string){
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {
-      provide: "backend",
+      provide: "inMemory",
       useValue: "InMemory"
     },
     {
+      provide: "localStorage",
+      useValue: "LocalStorage"
+    },
+    {
       provide: DataService,
-      deps: ['backend'],
+      deps: ['localStorage'],
       useFactory: DataServiceFactory,  
     },
   ],
